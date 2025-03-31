@@ -1,5 +1,4 @@
-// --- EXTREMELY RICH LIST OF MUSIC GENRES (JavaScript version) ---
-// Keep the genre names themselves as they are (proper nouns/terms)
+// --- EXTREMELY RICH LIST OF MUSIC GENRES ---
 const musicGenres = [
     // --- Rock & Subgenres ---
     "Rock and Roll", "Classic Rock", "Hard Rock", "Arena Rock", "Glam Rock",
@@ -186,54 +185,70 @@ const musicGenres = [
 
 // --- Page Logic ---
 
-// Get DOM elements using their updated IDs
+// Get DOM elements
 const randomizeButtonElement = document.getElementById('randomizeButton');
 const resultElement = document.getElementById('resultDisplay');
 const genreCountElement = document.getElementById('genreCount');
-const dateInfoElement = document.getElementById('currentDateInfo');
-const resultContainerElement = document.getElementById('result-container'); // Result container for effect
+// Date element reference removed
+const resultContainerElement = document.getElementById('result-container');
 
-// Function to format the date in English
-function getFormattedDate() {
-    const today = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    // Use 'en-US' locale for English names
-    try {
-        return today.toLocaleDateString('en-US', options);
-    } catch (e) {
-        // Fallback if locale is not supported
-        console.warn("Locale 'en-US' not supported, using default format.");
-        return today.toLocaleDateString(undefined, options); // Use browser default
-    }
-}
+// Variable to store the interval ID for the animation
+let animationIntervalId = null;
 
-// Function to randomize the genre
+// Date formatting function removed
+
+// Function to randomize the genre with animation
 function randomizeGenre() {
-    // "Thinking" effect - slightly dim the result container background
-    resultContainerElement.style.backgroundColor = '#f8f9fa'; // Even lighter gray
-    resultElement.style.color = '#adb5bd'; // Dim text color
-    resultElement.textContent = 'Randomizing...'; // Loading text in English
+    // 1. Disable the button to prevent multiple clicks during animation
+    randomizeButtonElement.disabled = true;
 
-    // Set a delay for better visual effect
+    // 2. Clear any previous interval just in case
+    if (animationIntervalId) {
+        clearInterval(animationIntervalId);
+    }
+
+    // 3. Determine the FINAL genre result BEFORE starting animation
+    const finalGenre = musicGenres[Math.floor(Math.random() * musicGenres.length)];
+
+    // 4. Add styling for the animation phase
+    resultElement.classList.add('randomizing');
+    resultElement.textContent = '...'; // Initial text while randomizing
+
+    // 5. Start the "slot machine" interval
+    const animationDuration = 2000; // Total animation time in milliseconds (e.g., 2 seconds)
+    const intervalTime = 75;       // How often the text updates (milliseconds)
+
+    animationIntervalId = setInterval(() => {
+        // Display a *temporary* random genre
+        const temporaryGenre = musicGenres[Math.floor(Math.random() * musicGenres.length)];
+        resultElement.textContent = temporaryGenre;
+    }, intervalTime);
+
+    // 6. Schedule the end of the animation
     setTimeout(() => {
-        const randomIndex = Math.floor(Math.random() * musicGenres.length);
-        const selectedGenre = musicGenres[randomIndex];
+        // Stop the interval
+        clearInterval(animationIntervalId);
+        animationIntervalId = null; // Clear the interval ID
 
-        // Update the result text
-        resultElement.textContent = selectedGenre;
+        // Remove animation styling
+        resultElement.classList.remove('randomizing');
 
-        // Restore colors
-        resultContainerElement.style.backgroundColor = '#e9ecef'; // Back to standard background
-        resultElement.style.color = '#8e44ad'; // Back to standard text color (purple)
+        // Display the FINAL result
+        resultElement.textContent = finalGenre;
 
-    }, 300); // 300 milliseconds delay
+        // Re-enable the button
+        randomizeButtonElement.disabled = false;
+
+    }, animationDuration);
 }
 
-// Set the genre count and date when the page loads
+// Set the genre count when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     genreCountElement.textContent = musicGenres.length;
-    dateInfoElement.textContent = `Today is ${getFormattedDate()}.`; // Display date in English
+    // Line setting date text removed
 });
 
 // Add event listener to the button
-randomizeButtonElement.addEventListener('click', randomizeGenre); // Use updated function name
+randomizeButtonElement.addEventListener('click', randomizeGenre);
+
+// END OF: script.js

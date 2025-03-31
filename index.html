@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Genre Discoverer</title>
+    <title>Music genre discoverer</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>🎶 Music Genre Discoverer 🎶</h1>
-        <p class="subtitle">Ready for a musical journey? Click the button to get a random genre and discover something new!</p>
-        <p id="currentDateInfo" class="date-info"></p> <div id="result-container"> <p id="resultDisplay">...</p> </div>
+        <h1>Music genre discoverer</h1>
+        <div id="result-container">
+            <p id="resultDisplay">...</p>
+        </div>
 
-        <button id="randomizeButton">Randomize Genre!</button> <p class="info">There are <span id="genreCount"></span> genres and styles in the database!</p> </div>
+        <button id="randomizeButton">Find new music</button>
+
+        <p class="info">There are <span id="genreCount"></span> genres and styles in the database!</p>
+    </div>
 
     <script src="script.js"></script>
 </body>
